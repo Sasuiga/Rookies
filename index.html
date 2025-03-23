@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>交互式网页示例</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .color-box {
+            width: 150px;
+            height: 150px;
+            margin: 20px auto;
+            background-color: #3498db;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .color-box:hover {
+            transform: scale(1.1);
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #2ecc71;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #27ae60;
+        }
+
+        .counter {
+            font-size: 24px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>欢迎来到交互式网页</h1>
+        <div class="color-box" id="colorBox"></div>
+        <div class="counter">点击次数：<span id="clickCount">0</span></div>
+        <button onclick="changeColor()">改变颜色</button>
+    </div>
+
+    <script>
+        let clickCount = 0;
+        const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6'];
+        const colorBox = document.getElementById('colorBox');
+        const clickCountElement = document.getElementById('clickCount');
+
+        function changeColor() {
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+            colorBox.style.backgroundColor = randomColor;
+            clickCount++;
+            clickCountElement.textContent = clickCount;
+        }
+
+        // 添加鼠标移动效果
+        colorBox.addEventListener('mousemove', (e) => {
+            const rect = colorBox.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            colorBox.style.transform = `perspective(1000px) rotateX(${y/10}deg) rotateY(${x/10}deg)`;
+        });
+
+        colorBox.addEventListener('mouseleave', () => {
+            colorBox.style.transform = 'none';
+        });
+    </script>
+</body>
+</html> 
