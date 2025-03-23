@@ -13,15 +13,51 @@
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: #1a1a1a;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
 
         .container {
             text-align: center;
             padding: 2rem;
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            z-index: 2;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(-10px) rotateX(5deg);
+        }
+
+        h1 {
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            }
+            to {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.8),
+                           0 0 30px rgba(255, 255, 255, 0.6);
+            }
         }
 
         .color-box {
@@ -30,45 +66,169 @@
             margin: 20px auto;
             background-color: #3498db;
             border-radius: 10px;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-box::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) rotate(45deg);
+            }
         }
 
         .color-box:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
         }
 
         button {
             padding: 10px 20px;
             font-size: 16px;
-            background-color: #2ecc71;
+            background: linear-gradient(45deg, #2ecc71, #27ae60);
             color: white;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
 
         button:hover {
-            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4);
+        }
+
+        button:active {
+            transform: translateY(1px);
         }
 
         .counter {
             font-size: 24px;
             margin: 20px 0;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .rainbow-text {
+            background: linear-gradient(
+                to right,
+                #ff0000,
+                #ff7f00,
+                #ffff00,
+                #00ff00,
+                #0000ff,
+                #4b0082,
+                #8f00ff
+            );
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: rainbow 5s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
         }
     </style>
 </head>
 <body>
+    <div id="particles-js"></div>
     <div class="container">
-        <h1>欢迎来到交互式网页</h1>
+        <h1 class="rainbow-text">欢迎来到交互式网页</h1>
         <div class="color-box" id="colorBox"></div>
         <div class="counter">点击次数：<span id="clickCount">0</span></div>
         <button onclick="changeColor()">改变颜色</button>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.js"></script>
     <script>
+        // 粒子效果配置
+        particlesJS('particles-js', {
+            particles: {
+                number: {
+                    value: 80,
+                    density: {
+                        enable: true,
+                        value_area: 800
+                    }
+                },
+                color: {
+                    value: '#ffffff'
+                },
+                shape: {
+                    type: 'circle'
+                },
+                opacity: {
+                    value: 0.5,
+                    random: false
+                },
+                size: {
+                    value: 3,
+                    random: true
+                },
+                line_linked: {
+                    enable: true,
+                    distance: 150,
+                    color: '#ffffff',
+                    opacity: 0.4,
+                    width: 1
+                },
+                move: {
+                    enable: true,
+                    speed: 6,
+                    direction: 'none',
+                    random: false,
+                    straight: false,
+                    out_mode: 'out',
+                    bounce: false
+                }
+            },
+            interactivity: {
+                detect_on: 'canvas',
+                events: {
+                    onhover: {
+                        enable: true,
+                        mode: 'repulse'
+                    },
+                    onclick: {
+                        enable: true,
+                        mode: 'push'
+                    },
+                    resize: true
+                }
+            },
+            retina_detect: true
+        });
+
         let clickCount = 0;
-        const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6'];
+        const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f1c40f', '#9b59b6', '#00ff00', '#ff00ff'];
         const colorBox = document.getElementById('colorBox');
         const clickCountElement = document.getElementById('clickCount');
 
@@ -77,6 +237,19 @@
             colorBox.style.backgroundColor = randomColor;
             clickCount++;
             clickCountElement.textContent = clickCount;
+            
+            // 添加点击波纹效果
+            const ripple = document.createElement('div');
+            ripple.style.position = 'absolute';
+            ripple.style.width = '100%';
+            ripple.style.height = '100%';
+            ripple.style.background = 'radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%)';
+            ripple.style.top = '0';
+            ripple.style.left = '0';
+            ripple.style.animation = 'ripple 0.6s ease-out';
+            colorBox.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
         }
 
         // 添加鼠标移动效果
@@ -90,6 +263,13 @@
 
         colorBox.addEventListener('mouseleave', () => {
             colorBox.style.transform = 'none';
+        });
+
+        // 添加键盘控制
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                changeColor();
+            }
         });
     </script>
 </body>
